@@ -6,6 +6,11 @@ Projeto simples de CRUD de usuarios com:
 - Persistencia em SQLite
 - Autenticacao simples por token para operacoes de escrita
 
+Links:
+- App online: `https://central-usuarios.onrender.com/app/`
+- Swagger: `https://central-usuarios.onrender.com/docs`
+- GitHub: `https://github.com/SherleyFelipe/central-usuarios`
+
 ## 1. Requisitos
 
 - Python 3.10+ instalado
