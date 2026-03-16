@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "FastAPI (Uvicorn)",
+      "type": "python",
+      "request": "launch",
+      "python": "${workspaceFolder}\\venv\\Scripts\\python.exe",
+      "module": "uvicorn",
+      "args": [
+        "main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8001",
+        "--reload"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "Uvicorn running on (https?://\\S+)",
+        "uriFormat": "%s/app/"
+      }
+    }
+  ]
+}

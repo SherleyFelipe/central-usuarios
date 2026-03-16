@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central Usuarios</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="bg-shape bg-shape-a"></div>
+  <div class="bg-shape bg-shape-b"></div>
+  <main class="container">
+    <header class="hero">
+      <div>
+        <p class="kicker">FastAPI + JavaScript</p>
+        <h1>Central de Usuarios</h1>
+        <p class="subtitle">Interface web para criar, editar e remover usuarios em tempo real.</p>
+      </div>
+      <a href="/docs" class="docs-link">Ver docs da API</a>
+    </header>
+
+    <section class="layout-grid">
+      <article class="card">
+        <div class="field compact">
+          <label for="api-token">Token de acesso</label>
+          <input id="api-token" name="api-token" type="password" placeholder="Informe o token para editar">
+          <p class="hint">Necessario para criar, editar e excluir usuarios.</p>
+        </div>
+        <h2 id="form-title">Novo usuario</h2>
+        <form id="user-form">
+          <div class="field">
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" type="text" required minlength="2" maxlength="100">
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+          <div class="actions">
+            <button type="submit" id="submit-btn">Salvar</button>
+            <button type="button" id="cancel-btn" class="ghost hidden">Cancelar edicao</button>
+          </div>
+        </form>
+        <p id="feedback" class="feedback"></p>
+      </article>
+
+      <article class="card">
+        <div class="list-header">
+          <div>
+            <h2>Usuarios cadastrados</h2>
+            <p class="hint">Total: <strong id="user-count">0</strong></p>
+          </div>
+          <button id="reload-btn" class="ghost">Atualizar lista</button>
+        </div>
+        <div class="field compact">
+          <label for="search">Buscar por nome</label>
+          <input id="search" name="search" type="text" placeholder="Digite para filtrar...">
+        </div>
+        <ul id="user-list" class="user-list"></ul>
+      </article>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
