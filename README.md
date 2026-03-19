@@ -9,9 +9,9 @@ Links:
 
 ## Preview
 
-Preview visual do projeto:
-- adicione uma screenshot em `docs/preview.png` para exibir a interface aqui no README
-- sugestao: capturar a tela de `https://central-usuarios.onrender.com/app/`
+Tela inicial da aplicacao Central de Usuarios, com formulario de cadastro e listagem de usuarios.
+
+![Tela inicial da aplicacao Central de Usuarios](docs/preview.png)
 
 ## Visao Geral
 
