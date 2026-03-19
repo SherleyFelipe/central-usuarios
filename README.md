@@ -1,171 +1,176 @@
-# Central Usuarios (FastAPI + Frontend)
+# Central de Usuarios
 
-Projeto simples de CRUD de usuarios com:
-- Backend em FastAPI
-- Frontend em HTML/CSS/JavaScript
-- Persistencia em SQLite
-- Token opcional via variavel de ambiente para proteger operacoes de escrita
+Aplicacao full stack de CRUD de usuarios desenvolvida para portfolio, com backend em FastAPI, frontend em HTML/CSS/JavaScript e persistencia em SQLite.
 
 Links:
 - App online: `https://central-usuarios.onrender.com/app/`
 - Swagger: `https://central-usuarios.onrender.com/docs`
-- GitHub: `https://github.com/SherleyFelipe/central-usuarios`
+- Repositorio: `https://github.com/SherleyFelipe/central-usuarios`
 
-## 1. Requisitos
+## Preview
 
-- Python 3.10+ instalado
-- PowerShell (Windows)
+Preview visual do projeto:
+- adicione uma screenshot em `docs/preview.png` para exibir a interface aqui no README
+- sugestao: capturar a tela de `https://central-usuarios.onrender.com/app/`
 
-## 2. Entrar na pasta do projeto
+## Visao Geral
+
+O projeto permite:
+- cadastrar usuarios
+- listar usuarios
+- buscar usuarios por nome no frontend
+- editar usuarios
+- remover usuarios
+- consumir a API via interface web e Swagger
+
+Foi construido para demonstrar integracao entre frontend e backend, organizacao de projeto, persistencia de dados, deploy e testes automatizados.
+
+## Stack
+
+- Python 3
+- FastAPI
+- Uvicorn
+- SQLite
+- HTML
+- CSS
+- JavaScript
+- Render
+- GitHub Actions
+
+## Funcionalidades
+
+- CRUD completo de usuarios
+- validacao de dados com Pydantic
+- persistencia local com SQLite
+- frontend servido pela propria API
+- redirecionamento da raiz `/` para `/app/`
+- documentacao automatica em `/docs`
+- token opcional por variavel de ambiente para proteger operacoes de escrita
+- testes automatizados de integracao
+- deploy online no Render
+
+## Estrutura
+
+- `app/main.py`: cria a aplicacao FastAPI e define as rotas
+- `app/database.py`: inicializa o banco e centraliza a conexao SQLite
+- `app/schemas.py`: modelos de entrada e saida
+- `app/auth.py`: validacao opcional do token via `API_USUARIOS_TOKEN`
+- `frontend/index.html`: estrutura da interface
+- `frontend/style.css`: estilos da interface
+- `frontend/app.js`: integracao do frontend com a API
+- `tests/test_api.py`: testes automatizados de integracao
+- `render.yaml`: configuracao de deploy no Render
+
+## Endpoints
+
+- `GET /health`: status da API
+- `GET /usuarios`: lista usuarios
+- `GET /usuarios/{id}`: busca usuario por ID
+- `POST /usuarios`: cria usuario
+- `PUT /usuarios/{id}`: atualiza usuario
+- `DELETE /usuarios/{id}`: remove usuario
+
+Se `API_USUARIOS_TOKEN` estiver configurada, `POST`, `PUT` e `DELETE` exigem o header:
+
+```text
+X-API-Token: SEU_TOKEN
+```
+
+## Como Rodar Localmente
+
+Requisitos:
+- Python 3.10+
+- PowerShell no Windows
+
+Entrar na pasta do projeto:
 
 ```powershell
 cd "c:\Users\sherl\Documents\Portifolio\api-usuarios"
 ```
 
-## 3. Criar e ativar ambiente virtual (primeira vez)
+Criar e ativar o ambiente virtual:
 
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
-## 4. Instalar dependencias (primeira vez)
+Instalar dependencias:
 
 ```powershell
 .\venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-## 5. Iniciar o projeto
-
-Opcao rapida (recomendada):
+Iniciar a API:
 
 ```powershell
 .\start_api.bat
 ```
-Esse script abre uma nova janela do `cmd` com a API rodando.
-Os dados ficam salvos em `data/usuarios.db`.
-Sem `API_USUARIOS_TOKEN` configurado, o frontend cria, edita e exclui usuarios sem pedir token.
 
-Opcao direta:
+Ou, se preferir:
 
 ```powershell
 .\venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-## 6. Abrir no navegador
-
+Abrir no navegador:
 - Frontend: `http://127.0.0.1:8000/app/`
 - Swagger: `http://127.0.0.1:8000/docs`
 - Health: `http://127.0.0.1:8000/health`
 
-## 7. Testar CRUD no Swagger
+## Variaveis de Ambiente
 
-No `http://127.0.0.1:8000/docs`:
-- `POST /usuarios` cria
-- `GET /usuarios` lista
-- `GET /usuarios/{id}` busca
-- `PUT /usuarios/{id}` atualiza
-- `DELETE /usuarios/{id}` remove
-
-Se voce configurar `API_USUARIOS_TOKEN`, para `POST`, `PUT` e `DELETE` envie o header:
-
-```text
-X-API-Token: central-usuarios-admin-2026
-```
-
-## 8. Rodar testes automatizados
-
-```powershell
-.\venv\Scripts\python.exe -m unittest tests.test_api
-```
-
-Os testes sobem a API localmente em uma porta livre e usam um banco SQLite temporario.
-Tambem existe um workflow em [tests.yml](/c:/Users/sherl/Documents/Portifolio/api-usuarios/.github/workflows/tests.yml) para rodar esses testes no GitHub Actions a cada push e pull request.
-
-## 9. Configuracao opcional
-
-Variaveis de ambiente suportadas:
 - `API_USUARIOS_DB_PATH`: caminho customizado do banco SQLite
-- `API_USUARIOS_TOKEN`: se definido, protege `POST`, `PUT` e `DELETE` com o header `X-API-Token`
+- `API_USUARIOS_TOKEN`: se definida, protege operacoes de escrita
 
-Exemplo no PowerShell:
+Exemplo:
 
 ```powershell
 $env:API_USUARIOS_TOKEN="central-usuarios-admin-2026"
 .\venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-## 10. Rodar com Docker
+Arquivo de exemplo:
+- [.env.example](/c:/Users/sherl/Documents/Portifolio/api-usuarios/.env.example)
 
-Build da imagem:
+## Testes
 
-```powershell
-docker build -t central-usuarios .
-```
-
-Execucao do container:
+Rodar os testes automatizados:
 
 ```powershell
-docker run -p 8000:8000 -e API_USUARIOS_TOKEN=central-usuarios-admin-2026 central-usuarios
+.\venv\Scripts\python.exe -m unittest tests.test_api
 ```
 
-Se quiser persistir os dados do SQLite com Docker, monte um volume para `/app/data`.
+Os testes:
+- iniciam a API localmente em uma porta livre
+- usam banco SQLite temporario
+- validam fluxo de CRUD
+- validam erros de duplicidade e autenticacao
 
-## 11. Deploy no Render
+Tambem existe pipeline no GitHub Actions em [.github/workflows/tests.yml](/c:/Users/sherl/Documents/Portifolio/api-usuarios/.github/workflows/tests.yml).
 
-O projeto ja inclui [render.yaml](/c:/Users/sherl/Documents/Portifolio/api-usuarios/render.yaml) para deploy como Web Service no Render.
+## Deploy
 
-Passos:
-1. Suba este projeto para um repositorio no GitHub.
-2. No Render, crie um novo Blueprint ou Web Service apontando para esse repositorio.
-3. Confirme os comandos:
-   - Build: `pip install -r requirements.txt`
-   - Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-4. Defina o secret `API_USUARIOS_TOKEN`.
-5. Aguarde o deploy terminar.
+O projeto esta configurado para deploy no Render com [render.yaml](/c:/Users/sherl/Documents/Portifolio/api-usuarios/render.yaml).
 
-Links esperados apos deploy:
-- Frontend: `https://SEU-SERVICO.onrender.com/app/`
-- Swagger: `https://SEU-SERVICO.onrender.com/docs`
-- Health: `https://SEU-SERVICO.onrender.com/health`
+Pontos importantes:
+- a aplicacao usa `PORT` no ambiente de deploy
+- SQLite online precisa de disco persistente para manter os dados apos restart
+- se `API_USUARIOS_TOKEN` estiver definida no Render, clientes externos precisam enviar `X-API-Token`
 
-Observacao importante:
-- o Render informa que Web Services precisam escutar em `0.0.0.0` e usar a porta fornecida por `PORT`
-- sem disco persistente, o sistema de arquivos e efemero, entao o SQLite pode perder dados em restart ou redeploy
-- se quiser persistencia no Render, adicione um disk com mount path `/opt/render/project/src/data`
+## Diferenciais Para Portfolio
 
-## 12. Rodar com 1 clique no VS Code
+- projeto full stack funcional
+- frontend e backend integrados no mesmo deploy
+- documentacao automatica da API
+- configuracao de deploy
+- testes automatizados
+- uso de variaveis de ambiente
 
-Ja configurado neste projeto:
-- `Terminal -> Run Task... -> Iniciar API FastAPI`
-- ou `Run and Debug -> FastAPI (Uvicorn)` (F5), que inicia a API em `http://127.0.0.1:8001` e abre `http://127.0.0.1:8001/app/`
+## Proximos Passos
 
-Observacao:
-- `.\start_api.bat` e a execucao direta usam a porta `8000`
-- o debug do VS Code (F5) usa a porta `8001` para evitar conflito quando a API ja estiver aberta na `8000`
-
-## 13. Estrutura do projeto
-
-- `app/auth.py`: validacao do token da API
-- `app/auth.py`: validacao opcional do token da API via ambiente
-- `app/main.py`: criacao da aplicacao e rotas
-- `app/database.py`: inicializacao e conexao com SQLite
-- `app/schemas.py`: modelos Pydantic
-- `.github/workflows/tests.yml`: pipeline de testes no GitHub Actions
-- `Dockerfile`: imagem para deploy em container
-- `frontend/`: interface web
-- `render.yaml`: configuracao de deploy no Render
-- `tests/`: testes automatizados
-
-## 14. Problemas comuns
-
-- `Failed to fetch`: API nao esta rodando.
-  - Solucao: executar `.\start_api.bat` e manter aberta a janela da API.
-- erro `401 Token de acesso invalido`:
-  - Solucao: conferir se `API_USUARIOS_TOKEN` foi definida e, em clientes externos como Swagger/Postman, enviar `X-API-Token` com o mesmo valor.
-- erro de porta ao rodar no VS Code:
-  - Solucao: usar o perfil `FastAPI (Uvicorn)` ja configurado na `8001`, ou fechar a instancia que estiver ocupando a `8000`.
-- CSS/JS nao carregam:
-  - Solucao: abrir `http://127.0.0.1:8000/app/` (nao abrir `index.html` direto).
-- Pagina antiga:
-  - Solucao: `Ctrl + F5`.
+- migrar de SQLite para PostgreSQL em producao
+- adicionar paginacao e busca no backend
+- criar autenticacao admin com JWT
+- melhorar feedback visual de sucesso e erro no frontend
+- adicionar screenshot ou GIF do projeto no README
