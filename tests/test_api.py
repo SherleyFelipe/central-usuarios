@@ -163,6 +163,22 @@ class ApiIntegrationTests(unittest.TestCase):
         self.assertEqual(status, 401)
         self.assertEqual(body["detail"], "Token de acesso invalido")
 
+    def test_allows_write_when_token_is_not_configured(self) -> None:
+        os.environ.pop("API_USUARIOS_TOKEN", None)
+        try:
+            from app.auth import get_api_token
+
+            self.assertIsNone(get_api_token())
+            status, body = self.request(
+                "POST",
+                "/usuarios",
+                {"nome": "Livre", "email": "livre@example.com"},
+            )
+            self.assertEqual(status, 201)
+            self.assertEqual(body["nome"], "Livre")
+        finally:
+            os.environ["API_USUARIOS_TOKEN"] = API_TOKEN
+
 
 if __name__ == "__main__":
     unittest.main()

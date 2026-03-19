@@ -4,7 +4,7 @@ Projeto simples de CRUD de usuarios com:
 - Backend em FastAPI
 - Frontend em HTML/CSS/JavaScript
 - Persistencia em SQLite
-- Autenticacao simples por token para operacoes de escrita
+- Token opcional via variavel de ambiente para proteger operacoes de escrita
 
 Links:
 - App online: `https://central-usuarios.onrender.com/app/`
@@ -44,7 +44,7 @@ Opcao rapida (recomendada):
 ```
 Esse script abre uma nova janela do `cmd` com a API rodando.
 Os dados ficam salvos em `data/usuarios.db`.
-O token padrao para criar, editar e excluir e `portfolio-token-123`.
+Sem `API_USUARIOS_TOKEN` configurado, o frontend cria, edita e exclui usuarios sem pedir token.
 
 Opcao direta:
 
@@ -67,10 +67,10 @@ No `http://127.0.0.1:8000/docs`:
 - `PUT /usuarios/{id}` atualiza
 - `DELETE /usuarios/{id}` remove
 
-Para `POST`, `PUT` e `DELETE`, envie o header:
+Se voce configurar `API_USUARIOS_TOKEN`, para `POST`, `PUT` e `DELETE` envie o header:
 
 ```text
-X-API-Token: portfolio-token-123
+X-API-Token: central-usuarios-admin-2026
 ```
 
 ## 8. Rodar testes automatizados
@@ -86,7 +86,14 @@ Tambem existe um workflow em [tests.yml](/c:/Users/sherl/Documents/Portifolio/ap
 
 Variaveis de ambiente suportadas:
 - `API_USUARIOS_DB_PATH`: caminho customizado do banco SQLite
-- `API_USUARIOS_TOKEN`: token usado para operacoes de escrita
+- `API_USUARIOS_TOKEN`: se definido, protege `POST`, `PUT` e `DELETE` com o header `X-API-Token`
+
+Exemplo no PowerShell:
+
+```powershell
+$env:API_USUARIOS_TOKEN="central-usuarios-admin-2026"
+.\venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
+```
 
 ## 10. Rodar com Docker
 
@@ -99,7 +106,7 @@ docker build -t central-usuarios .
 Execucao do container:
 
 ```powershell
-docker run -p 8000:8000 -e API_USUARIOS_TOKEN=portfolio-token-123 central-usuarios
+docker run -p 8000:8000 -e API_USUARIOS_TOKEN=central-usuarios-admin-2026 central-usuarios
 ```
 
 Se quiser persistir os dados do SQLite com Docker, monte um volume para `/app/data`.
@@ -140,6 +147,7 @@ Observacao:
 ## 13. Estrutura do projeto
 
 - `app/auth.py`: validacao do token da API
+- `app/auth.py`: validacao opcional do token da API via ambiente
 - `app/main.py`: criacao da aplicacao e rotas
 - `app/database.py`: inicializacao e conexao com SQLite
 - `app/schemas.py`: modelos Pydantic
@@ -153,6 +161,8 @@ Observacao:
 
 - `Failed to fetch`: API nao esta rodando.
   - Solucao: executar `.\start_api.bat` e manter aberta a janela da API.
+- erro `401 Token de acesso invalido`:
+  - Solucao: conferir se `API_USUARIOS_TOKEN` foi definida e, em clientes externos como Swagger/Postman, enviar `X-API-Token` com o mesmo valor.
 - erro de porta ao rodar no VS Code:
   - Solucao: usar o perfil `FastAPI (Uvicorn)` ja configurado na `8001`, ou fechar a instancia que estiver ocupando a `8000`.
 - CSS/JS nao carregam:

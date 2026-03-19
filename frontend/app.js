@@ -9,11 +9,9 @@ const cancelBtn = document.querySelector("#cancel-btn");
 const reloadBtn = document.querySelector("#reload-btn");
 const searchInput = document.querySelector("#search");
 const userCount = document.querySelector("#user-count");
-const apiTokenInput = document.querySelector("#api-token");
 
 let editingId = null;
 let allUsers = [];
-const TOKEN_STORAGE_KEY = "central-usuarios-token";
 const API_BASE = window.location.origin.startsWith("http")
   ? window.location.origin
   : "http://127.0.0.1:8000";
@@ -27,11 +25,6 @@ const showFeedback = (message, type = "ok") => {
   feedback.textContent = message;
   feedback.classList.remove("ok", "error");
   feedback.classList.add(type);
-};
-
-const getAuthHeaders = () => {
-  const token = apiTokenInput ? apiTokenInput.value.trim() : "";
-  return token ? { "X-API-Token": token } : {};
 };
 
 const resetFormState = () => {
@@ -79,7 +72,6 @@ const renderUserItem = (usuario) => {
     try {
       const response = await fetch(`${API_BASE}/usuarios/${usuario.id}`, {
         method: "DELETE",
-        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -166,7 +158,7 @@ form.addEventListener("submit", async (event) => {
   try {
     const response = await fetch(url, {
       method,
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
@@ -196,13 +188,6 @@ reloadBtn.addEventListener("click", () => {
 if (searchInput) {
   searchInput.addEventListener("input", () => {
     updateList();
-  });
-}
-
-if (apiTokenInput) {
-  apiTokenInput.value = window.localStorage.getItem(TOKEN_STORAGE_KEY) || "";
-  apiTokenInput.addEventListener("input", () => {
-    window.localStorage.setItem(TOKEN_STORAGE_KEY, apiTokenInput.value.trim());
   });
 }
 
